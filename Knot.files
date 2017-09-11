@@ -240,6 +240,7 @@ src/knot/journal/old_journal.c
 src/knot/journal/old_journal.h
 src/knot/journal/serialization.c
 src/knot/journal/serialization.h
+src/knot/modules/cookies/cookies.c
 src/knot/modules/dnsproxy/dnsproxy.c
 src/knot/modules/dnstap/dnstap.c
 src/knot/modules/noudp/noudp.c
