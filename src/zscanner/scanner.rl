@@ -394,6 +394,19 @@ static void parse(
 
 	// Storing r_data pointer.
 	s->r_data_tail = rdata_tail - s->r_data;
+
+	if (s->wrap == WRAP_START) {
+		if (set_input_string(s, "\\", 1, true) != 0) {
+			printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n");
+			return;
+		}
+
+		s->wrap = WRAP_END;
+
+		parse(s);
+	} else {
+		s->wrap = WRAP_NONE;
+	}
 }
 
 __attribute__((visibility("default")))

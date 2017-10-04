@@ -141,6 +141,12 @@ struct scanner {
 	/*! Absolute path for relative includes. */
 	char     *path;
 
+	enum {
+		WRAP_NONE = 0,
+		WRAP_START,
+		WRAP_END
+	} wrap;
+
 	/*! Auxiliary array of bitmap window blocks. */
 	window_t windows[BITMAP_WINDOWS];
 	/*! Last window block which is used (-1 means no window). */

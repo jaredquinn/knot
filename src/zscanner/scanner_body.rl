@@ -1960,12 +1960,24 @@
 		}
 	}
 
+	# Multiple fhold at the input block end avoidance.
+	action _wrap_in {
+		if (pe - p == 1) {
+			s->wrap = WRAP_START;
+		}
+	}
+	action _wrap_out {
+		if (s->wrap == WRAP_NONE) {
+			fhold;
+		}
+	}
+
 	# rdata can be in text or hex format with leading "\#" string.
 	r_data =
-		( sep  . ^('\\' | all_wchar)     $_text_r_data
-		| sep  . '\\' . ^'#' ${ fhold; } $_text_r_data
-		| sep  . '\\' .  '#'             $_hex_r_data   # Hex format.
-		| sep? . end_wchar               $_text_r_data  # Empty rdata.
+		( sep  . ^('\\' | all_wchar)              $_text_r_data
+		| sep  . '\\' $_wrap_in . ^'#' $_wrap_out $_text_r_data
+		| sep  . '\\'           .  '#'            $_hex_r_data   # Hex format.
+		| sep? . end_wchar                        $_text_r_data  # Empty rdata.
 		) >_r_data_init $!_r_data_error;
 	# END
 
