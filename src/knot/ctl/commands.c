@@ -356,9 +356,11 @@ static int zone_ksk_sbm_confirm(zone_t *zone, ctl_args_t *args)
 		return ret;
 	}
 
-	ret = knot_dnssec_ksk_sbm_confirm(&ctx);
+	uint16_t keytag;
+	ret = knot_dnssec_ksk_sbm_confirm(&ctx, &keytag);
 	kdnssec_ctx_deinit(&ctx);
 	if (ret == KNOT_EOK) {
+		printf("client<%u>\n", keytag);
 		// NOT zone_events_schedule_user(), intentionally!
 		zone_events_schedule_now(zone, ZONE_EVENT_DNSSEC);
 	}

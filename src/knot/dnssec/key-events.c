@@ -626,7 +626,7 @@ int knot_dnssec_key_rollover(kdnssec_ctx_t *ctx, zone_sign_reschedule_t *resched
 	return ret;
 }
 
-int knot_dnssec_ksk_sbm_confirm(kdnssec_ctx_t *ctx)
+int knot_dnssec_ksk_sbm_confirm(kdnssec_ctx_t *ctx, uint16_t *keytag)
 {
 	for (size_t i = 0; i < ctx->zone->num_keys; i++) {
 		knot_kasp_key_t *key = &ctx->zone->keys[i];
@@ -634,6 +634,9 @@ int knot_dnssec_ksk_sbm_confirm(kdnssec_ctx_t *ctx)
 		    get_key_state(key, ctx->now) == DNSSEC_KEY_STATE_READY) {
 			int ret = exec_new_signatures(ctx, key);
 			if (ret == KNOT_EOK) {
+				if (keytag != NULL) {
+					*keytag = dnssec_key_get_keytag(key->key);
+				}
 				ret = kdnssec_ctx_commit(ctx);
 			}
 			return ret;

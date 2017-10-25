@@ -164,7 +164,6 @@ static bool parents_have_ds(zone_t *zone, conf_t *conf, zone_key_t *key)
 	conf_val_t policy = conf_zone_get(conf, C_DNSSEC_POLICY, zone->name);
 	conf_id_fix_default(&policy);
 	conf_val_t ksk_sbm = conf_id_get(conf, C_POLICY, C_KSK_SBM, &policy);
-	assert(conf_val_count(&ksk_sbm) < 2);
 	if (conf_val_count(&ksk_sbm) < 1) {
 		return false;
 	}
@@ -211,8 +210,12 @@ int event_parent_ds_q(conf_t *conf, zone_t *zone)
 		if (dnssec_key_get_flags(key->key) == DNSKEY_FLAGS_KSK &&
 		    key->cds_priority > 1) {
 			if (parents_have_ds(zone, conf, key)) {
-				ret = knot_dnssec_ksk_sbm_confirm(&ctx);
+printf("aaaaaaaxxxxxxxxxsssssssssssssssssssssssssssssss\n");
+				uint16_t keytag;
+				ret = knot_dnssec_ksk_sbm_confirm(&ctx, &keytag);
+				printf("<%u>\n", keytag);
 			} else {
+printf("xxxxxxxxxsssssssssssssssssssssssssssssss\n");
 				ret = KNOT_ENOENT;
 			}
 		}

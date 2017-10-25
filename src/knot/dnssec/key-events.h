@@ -44,7 +44,7 @@ int knot_dnssec_key_rollover(kdnssec_ctx_t *ctx, zone_sign_reschedule_t *resched
  *
  * \return KNOT_E*
  */
-int knot_dnssec_ksk_sbm_confirm(kdnssec_ctx_t *ctx);
+int knot_dnssec_ksk_sbm_confirm(kdnssec_ctx_t *ctx, uint16_t *keytag);
 
 /*!
  * \brief Is there a key in sumbmission phase?
