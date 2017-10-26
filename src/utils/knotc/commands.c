@@ -257,6 +257,10 @@ static void format_data(ctl_cmd_t cmd, knot_ctl_type_t data_type,
 			       (error != NULL ? ")"       : ""));
 			*empty = false;
 		}
+		if (cmd == CTL_ZONE_KSK_SBM && type != NULL) {
+			printf("%s", value);
+
+		}
 		if (cmd == CTL_ZONE_STATUS && type != NULL) {
 			printf("%s %s: %s",
 			       (data_type != KNOT_CTL_TYPE_DATA ? " |" : ""),

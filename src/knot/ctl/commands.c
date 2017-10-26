@@ -347,7 +347,15 @@ static int zone_sign(zone_t *zone, ctl_args_t *args)
 
 static int zone_ksk_sbm_confirm(zone_t *zone, ctl_args_t *args)
 {
-	UNUSED(args);
+	char name[KNOT_DNAME_TXT_MAXLEN + 1];
+	if (knot_dname_to_str(name, zone->name, sizeof(name)) == NULL) {
+		return KNOT_EINVAL;
+	}
+
+	knot_ctl_data_t data = {
+		[KNOT_CTL_IDX_ZONE] = name,
+		[KNOT_CTL_IDX_DATA] = "keytag"
+	};
 
 	kdnssec_ctx_t ctx = { 0 };
 
@@ -360,9 +368,10 @@ static int zone_ksk_sbm_confirm(zone_t *zone, ctl_args_t *args)
 	ret = knot_dnssec_ksk_sbm_confirm(&ctx, &keytag);
 	kdnssec_ctx_deinit(&ctx);
 	if (ret == KNOT_EOK) {
-		printf("client<%u>\n", keytag);
 		// NOT zone_events_schedule_user(), intentionally!
 		zone_events_schedule_now(zone, ZONE_EVENT_DNSSEC);
+		printf("client<%u>\n", keytag);
+		ret = knot_ctl_send(args->ctl, KNOT_CTL_TYPE_DATA, &data);
 	}
 
 	return ret;

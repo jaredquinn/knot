@@ -210,12 +210,8 @@ int event_parent_ds_q(conf_t *conf, zone_t *zone)
 		if (dnssec_key_get_flags(key->key) == DNSKEY_FLAGS_KSK &&
 		    key->cds_priority > 1) {
 			if (parents_have_ds(zone, conf, key)) {
-printf("aaaaaaaxxxxxxxxxsssssssssssssssssssssssssssssss\n");
-				uint16_t keytag;
-				ret = knot_dnssec_ksk_sbm_confirm(&ctx, &keytag);
-				printf("<%u>\n", keytag);
+				ret = knot_dnssec_ksk_sbm_confirm(&ctx, NULL);
 			} else {
-printf("xxxxxxxxxsssssssssssssssssssssssssssssss\n");
 				ret = KNOT_ENOENT;
 			}
 		}
@@ -237,4 +233,3 @@ printf("xxxxxxxxxsssssssssssssssssssssssssssssss\n");
 
 	return KNOT_EOK; // allways ok, if failure it has been rescheduled
 }
-
